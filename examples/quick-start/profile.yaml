@@ -1,5 +1,5 @@
 name_or_alias: "示例同学"
-current_stage: "应届/实习求职"
+current_stage: "在校找实习"  # 在校找实习 | 在校找校招 | 应届找全职 | 其他
 education:
   school: "示例大学"
   degree: "本科"
@@ -16,8 +16,9 @@ unavailable_roles:
 constraints:
   job_type: "实习"
   availability: "2周内"
-  salary_floor: "不低于80元/天"
   internship_duration: "至少3个月"
+  accept_conversion: "优先"  # 是 | 否 | 优先
+  salary_floor: "不低于80元/天"
 preferred_industries:
   - "AI 应用"
   - "教育科技"
