@@ -1,17 +1,18 @@
 name_or_alias: ""
-current_stage: "应届/实习求职"  # 应届/实习求职 | 换工作 | 转行 | 其他
+current_stage: "在校找实习"  # 在校找实习 | 在校找校招 | 应届找全职 | 其他
 education:
   school: ""
-  degree: ""
+  degree: ""          # 本科 | 硕士 | 博士 | 专科
   major: ""
-  graduation_year: ""
+  graduation_year: "" # 预计毕业年份，如 2026
 target_city: []
 target_roles: []
 unavailable_roles: []
 constraints:
-  job_type: ""         # 实习 | 全职
-  availability: ""     # 可到岗时间
-  salary_floor: ""     # 薪资底线
-  internship_duration: ""  # 实习时长要求
+  job_type: ""              # 实习 | 全职
+  availability: ""          # 可到岗时间，如 2025-07-01
+  internship_duration: ""   # 实习时长要求，如 至少3个月
+  accept_conversion: ""     # 是否接受实习转正：是 | 否 | 优先
+  salary_floor: ""          # 薪资底线（选填）
 preferred_industries: []
 risk_notes: []
