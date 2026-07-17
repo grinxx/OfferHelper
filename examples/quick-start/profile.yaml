@@ -1,0 +1,25 @@
+name_or_alias: "示例同学"
+current_stage: "应届/实习求职"
+education:
+  school: "示例大学"
+  degree: "本科"
+  major: "信息管理"
+  graduation_year: "2026"
+target_city:
+  - "深圳"
+  - "广州"
+target_roles:
+  - "AI 应用实习生"
+  - "产品运营实习生"
+unavailable_roles:
+  - "纯销售"
+constraints:
+  job_type: "实习"
+  availability: "2周内"
+  salary_floor: "不低于80元/天"
+  internship_duration: "至少3个月"
+preferred_industries:
+  - "AI 应用"
+  - "教育科技"
+risk_notes:
+  - "真实求职时请替换成自己的信息，不要使用虚构样例。"

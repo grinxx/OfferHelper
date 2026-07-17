@@ -1,0 +1,17 @@
+name_or_alias: ""
+current_stage: "应届/实习求职"  # 应届/实习求职 | 换工作 | 转行 | 其他
+education:
+  school: ""
+  degree: ""
+  major: ""
+  graduation_year: ""
+target_city: []
+target_roles: []
+unavailable_roles: []
+constraints:
+  job_type: ""         # 实习 | 全职
+  availability: ""     # 可到岗时间
+  salary_floor: ""     # 薪资底线
+  internship_duration: ""  # 实习时长要求
+preferred_industries: []
+risk_notes: []
