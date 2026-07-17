@@ -1,10 +1,20 @@
 # Changelog
 
+## 0.3.0
+
+- 目标群体聚焦为**应届生和在校生**，移除换工作/转行分支。
+- 首次启动引导改为三分支：在校找实习/校招、应届找全职、其他。
+- `profile.yaml` 模板新增 `accept_conversion` 字段（是否接受实习转正）。
+- `references/job-matching-rubric.md` 新增校招专项评估模块，经历维度改为课程项目/竞赛/实习。
+- `references/interview-training.md` 新增应届生高频 10 题和职业规划表达审查。
+- `references/intake-flow.md` 经历挖掘重写，优先课程项目、竞赛、社团、实习。
+- README 和文档定位更新为"应届生/在校生专属"。
+
 ## 0.2.0
 
 - 改名为 OfferHelper，触发名更新为 `$offer-helper`。
 - 全面中文化 references/ 目录下的规则文件，保留技术术语英文。
-- 新增首次启动三问引导流程，支持应届/换工作/转行三条路径。
+- 新增首次启动三问引导流程。
 - 新增 `references/followup-rules.md`，定义各投递状态的后续动作和复盘触发条件。
 - `application-tracker.csv` 新增 `followup_due`、`followup_action` 字段。
 - `review-log.md` 新增周复盘模板。
