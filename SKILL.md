@@ -90,17 +90,24 @@ job-search-cases/<yyyy-mm-dd-user-slug>/
 
 ## 辅助脚本
 
+以下命令中的 `<skill-dir>` 指本 Skill 的安装目录（即 SKILL.md 所在目录）：
+- Claude Code 个人级安装：`~/.claude/skills/offer-helper`
+- Codex 个人级安装：`~/.codex/skills/offer-helper`
+- 项目级安装：`.agents/skills/offer-helper`
+
+请把 `<skill-dir>` 替换为实际路径后执行：
+
 ```bash
-python3 .agents/skills/offer-helper/scripts/extract_resume_text.py \
+python3 <skill-dir>/scripts/extract_resume_text.py \
   --input job-search-cases/<case>/raw/resume/resume.pdf \
   --output job-search-cases/<case>/raw/resume/resume.txt
 
-python3 .agents/skills/offer-helper/scripts/normalize_jobs.py \
+python3 <skill-dir>/scripts/normalize_jobs.py \
   --input job-search-cases/<case>/raw/job-posts/jobs.md \
   --output job-search-cases/<case>/jobs.jsonl \
   --source-type user_paste
 
-python3 .agents/skills/offer-helper/scripts/score_job_matches.py \
+python3 <skill-dir>/scripts/score_job_matches.py \
   --profile job-search-cases/<case>/profile.yaml \
   --strengths job-search-cases/<case>/strengths.md \
   --jobs job-search-cases/<case>/jobs.jsonl \

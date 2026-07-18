@@ -77,9 +77,14 @@ def parse_markdown_table(text: str) -> list[dict[str, str]]:
 
 
 def parse_text_blocks(text: str) -> list[dict[str, str]]:
-    blocks = [b.strip() for b in re.split(r"\n\s*(?:---|### .+)\s*\n", text) if b.strip()]
+    # 用 --- 或 ### 标题作为块分隔符；行首匹配，使文件开头的首块与后续块
+    # 处理方式一致（都剥离标题行，不把 "### xxx" 混进 jd_text）。
+    raw_blocks = re.split(r"(?m)^\s*(?:---+|###\s.*)\s*$", text)
     rows: list[dict[str, str]] = []
-    for block in blocks:
+    for chunk in raw_blocks:
+        block = chunk.strip()
+        if not block:
+            continue
         row: dict[str, str] = {"jd_text": block}
         for label, field in [("平台", "platform"), ("公司", "company"), ("岗位", "title"), ("职位", "title"), ("城市", "city"), ("链接", "url")]:
             match = re.search(rf"{label}\s*[:：]\s*(.+)", block)
