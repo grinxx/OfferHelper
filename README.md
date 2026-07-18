@@ -101,6 +101,23 @@ Claude Code、Codex 和项目级安装说明见 [docs/install-cn.md](docs/instal
 git clone https://github.com/grinxx/OfferHelper.git .agents/skills/offer-helper
 ```
 
+### 4. 更新到最新版本
+
+Skill 安装后是你本地磁盘上的一份拷贝，**不会自动跟随仓库更新**。仓库有新版本时，按你当初的安装方式手动更新：
+
+**用 `git clone` 安装的**（Skill 目录是一个 git 仓库）：
+
+```bash
+cd ~/.claude/skills/offer-helper   # 换成你的实际 Skill 目录
+git pull
+```
+
+**下载 ZIP 安装的**：重新下载最新 ZIP，覆盖原 Skill 目录即可。
+
+**让 Agent 帮你安装的**：再对 Agent 说一次"更新这个 Skill"，它会重新拉取最新代码。
+
+> 更新只影响 Skill 代码本身。你的求职案例数据在 `job-search-cases/`（通常在你的工作目录，不在 Skill 目录内），不受更新影响；若你选择删除目录重装，请勿把案例数据一起删掉。
+
 ## Usage Examples
 
 ### 1. 挖掘优势
