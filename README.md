@@ -64,7 +64,19 @@ OfferHelper 不是"自动投递神器"：
 
 ## Quick Start
 
-### 1. 让 Agent 帮你安装
+### 1. 一行命令安装（推荐）
+
+在终端运行：
+
+```bash
+npx skills add grinxx/OfferHelper
+```
+
+命令会 clone 仓库、列出可安装的 Agent 供你选择，并在安装前展示安全扫描结果。安装完成后重启 Agent 或新开会话，输入 `$offer-helper` 即可触发。
+
+> 这也是让 OfferHelper 计入 [skills.sh](https://skills.sh/grinxx/OfferHelper) 安装量统计的方式；`git clone` 等方式不会计入。
+
+### 2. 让 Agent 帮你安装
 
 在 Claude Code 或其他支持 Skill 的 Agent 里直接说：
 
@@ -81,7 +93,7 @@ $offer-helper
 请先问我必要问题，再帮我建立求职案例目录。
 ```
 
-### 2. 手动安装备用
+### 3. 手动安装备用
 
 如果你的 Agent 不能自动安装，可以按所用工具的 Skill 目录手动 clone：
 
@@ -93,7 +105,7 @@ git clone https://github.com/grinxx/OfferHelper.git ~/.claude/skills/offer-helpe
 
 Claude Code、Codex 和项目级安装说明见 [docs/install-cn.md](docs/install-cn.md)。
 
-### 3. 项目级安装备用
+### 4. 项目级安装备用
 
 如果你只想在当前项目启用：
 
@@ -101,7 +113,7 @@ Claude Code、Codex 和项目级安装说明见 [docs/install-cn.md](docs/instal
 git clone https://github.com/grinxx/OfferHelper.git .agents/skills/offer-helper
 ```
 
-### 4. 更新到最新版本
+### 5. 更新到最新版本
 
 Skill 安装后是你本地磁盘上的一份拷贝，**不会自动跟随仓库更新**。仓库有新版本时，按你当初的安装方式手动更新：
 
