@@ -44,6 +44,18 @@ class KeywordScoreTests(unittest.TestCase):
         self.assertLessEqual(score, 40)
         self.assertGreater(score, 0)
 
+    def test_long_jd_not_penalized(self):
+        # 命中 REFERENCE_TERMS 个关键词即接近满分，长 JD 的额外无关词不应压低分数。
+        skills = " ".join(f"skill{i}" for i in range(sc.REFERENCE_TERMS))
+        noise = " ".join(f"noise{i}" for i in range(50))
+        score, _ = sc.keyword_score(skills, skills + " " + noise, 40)
+        self.assertGreaterEqual(score, 36)
+
+    def test_short_jd_requires_full_coverage(self):
+        # 短 JD 分母取自身词数：只命中一半关键词只能拿一半分。
+        score, _ = sc.keyword_score("python", "python sql", 40)
+        self.assertEqual(score, 20)
+
 
 class PriorityTests(unittest.TestCase):
     def test_bands(self):
@@ -94,6 +106,28 @@ class LoadProfileTests(unittest.TestCase):
         constraint = sc.profile_constraint_text(profile)
         self.assertIn("实习", constraint)
         self.assertIn("2周内", constraint)
+
+    def test_experience_text_uses_education_only(self):
+        # 经历信号只取教育背景，不能混入 target_roles / preferred_industries 意向字段，
+        # 否则"我想投这个岗位"会被误算成"我有相关经历"。
+        profile = sc.load_profile(self.NESTED)
+        experience = sc.profile_experience_text(profile)
+        self.assertIn("示例大学", experience)
+        self.assertIn("信息管理", experience)
+        self.assertNotIn("产品运营实习生", experience)
+        self.assertNotIn("AI 应用", experience)
+
+
+class FormatGapsTests(unittest.TestCase):
+    def test_hard_not_specified_adds_manual_check_note(self):
+        note = sc._format_gaps([], [], hard_specified=False)
+        self.assertIn("JD未单列硬性要求", note)
+
+    def test_hard_specified_omits_that_note(self):
+        note = sc._format_gaps(["python"], ["sql"], hard_specified=True)
+        self.assertNotIn("JD未单列硬性要求", note)
+        self.assertIn("已覆盖", note)
+        self.assertIn("待核对", note)
 
 
 if __name__ == "__main__":

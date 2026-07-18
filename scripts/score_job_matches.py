@@ -111,6 +111,9 @@ def _flatten_values(node) -> list[str]:
 
 INTEREST_FIELDS = ["target_roles", "preferred_industries", "target_city"]
 CONSTRAINT_FIELDS = ["constraints", "target_city", "unavailable_roles"]
+# 只有教育背景属于"真实经历"信号；target_roles / preferred_industries 等是意向，
+# 不能当作经历去匹配 JD，否则"我想投这个岗位"会被误算成"我有相关经历"。
+EXPERIENCE_FIELDS = ["education"]
 
 
 def profile_interest_text(profile: dict) -> str:
@@ -129,6 +132,14 @@ def profile_constraint_text(profile: dict) -> str:
     """Realistic constraints — job type, availability, city, exclusions."""
     parts: list[str] = []
     for field in CONSTRAINT_FIELDS:
+        parts.extend(_flatten_values(profile.get(field)))
+    return " ".join(parts)
+
+
+def profile_experience_text(profile: dict) -> str:
+    """Real-experience signal from profile — education only, no intent fields."""
+    parts: list[str] = []
+    for field in EXPERIENCE_FIELDS:
         parts.extend(_flatten_values(profile.get(field)))
     return " ".join(parts)
 
@@ -186,13 +197,22 @@ def _jieba_cut(chunk: str):
     return list(_JIEBA.cut_for_search(chunk))
 
 
+# 匹配度以"命中多少关键词"衡量，而非"占 JD 全部词的比例"。用固定参考基数
+# REFERENCE_TERMS 作分母上限：命中约这么多关键词即接近满分，避免详细的长 JD
+# 因总词数大而被系统性压低分数（长 JD 惩罚）。
+REFERENCE_TERMS = 8
+
+
 def keyword_score(source: str, target: str, max_points: int) -> tuple[int, list[str]]:
     source_terms = set(tokens(source))
     target_terms = set(tokens(target))
     if not target_terms:
         return 0, []
     overlap = sorted(source_terms & target_terms)
-    score = min(max_points, round(max_points * len(overlap) / max(5, len(target_terms))))
+    # 分母取 JD 词数与参考基数中的较小者：短 JD 仍按自身词数要求全覆盖，
+    # 长 JD 则以命中 REFERENCE_TERMS 个关键词为接近满分的门槛。
+    denom = min(len(target_terms), REFERENCE_TERMS)
+    score = min(max_points, round(max_points * len(overlap) / denom))
     return score, overlap[:12]
 
 
@@ -228,8 +248,10 @@ def _dedupe(items: list[str]) -> list[str]:
     return result
 
 
-def _format_gaps(covered: list[str], uncovered: list[str]) -> str:
+def _format_gaps(covered: list[str], uncovered: list[str], hard_specified: bool = True) -> str:
     parts: list[str] = []
+    if not hard_specified:
+        parts.append("JD未单列硬性要求，硬性分给中性基准，务必人工核对")
     if covered:
         parts.append("已覆盖: " + "、".join(covered[:8]))
     if uncovered:
@@ -250,17 +272,25 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--profile", required=True)
     parser.add_argument("--strengths", required=True)
+    parser.add_argument("--experience", help="Optional experience-assets.md path (真实经历，用于匹配)")
     parser.add_argument("--jobs", required=True)
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
 
     profile_text = read_text(args.profile)
     strengths_text = read_text(args.strengths)
+    experience_text = read_text(args.experience)
     profile = load_profile(profile_text)
     interest_text = profile_interest_text(profile)
     constraint_text = profile_constraint_text(profile)
-    # 匹配度基于真实经历（简历/优势），不掺入意向字段。
-    evidence_text = profile_text + "\n" + strengths_text
+    # 匹配度只用真实经历：experience-assets.md + strengths.md + profile 的教育背景。
+    # 不使用 profile.yaml 原文，避免 target_roles/preferred_industries 等意向字段
+    # 被当成经历去匹配 JD（把"我想投"误算成"我具备"）。
+    evidence_text = "\n".join([
+        experience_text,
+        strengths_text,
+        profile_experience_text(profile),
+    ])
 
     output_path = pathlib.Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -278,9 +308,16 @@ def main() -> int:
             continue
         job = json.loads(line)
         job_text = " ".join(str(job.get(k, "")) for k in ["title", "company", "city", "jd_text", "hard_requirements", "nice_to_have"])
-        hard_req_text = str(job.get("hard_requirements") or job.get("jd_text", ""))
+        hard_req_text = str(job.get("hard_requirements", "")).strip()
         fit, fit_terms = keyword_score(evidence_text, job_text, 40)
-        hard, hard_terms = keyword_score(evidence_text, hard_req_text, 20)
+        # hard 只针对岗位单列的 hard_requirements 评分；若岗位没提供该字段，
+        # 不回退到 jd_text（否则与 fit 重复计分），而是给中性基准分并提示人工核对。
+        if hard_req_text:
+            hard, hard_terms = keyword_score(evidence_text, hard_req_text, 20)
+            hard_specified = True
+        else:
+            hard, hard_terms = 10, []
+            hard_specified = False
         # interest 衡量用户意向方向（目标岗位/行业/城市），与 fit/hard 解耦。
         interest, interest_terms = keyword_score(
             interest_text, job_text + " " + str(job.get("user_interest", "")), 15
@@ -292,7 +329,7 @@ def main() -> int:
         hard_req_terms = set(tokens(hard_req_text))
         covered = sorted(t for t in hard_terms if t in hard_req_terms)
         uncovered = sorted(hard_req_terms - set(hard_terms))
-        must_have_gaps = _format_gaps(covered, uncovered)
+        must_have_gaps = _format_gaps(covered, uncovered, hard_specified)
         resume_focus = _format_resume_focus(fit_terms, uncovered)
 
         rows.append({

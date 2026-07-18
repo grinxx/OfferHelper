@@ -110,6 +110,7 @@ python3 <skill-dir>/scripts/normalize_jobs.py \
 python3 <skill-dir>/scripts/score_job_matches.py \
   --profile job-search-cases/<case>/profile.yaml \
   --strengths job-search-cases/<case>/strengths.md \
+  --experience job-search-cases/<case>/experience-assets.md \
   --jobs job-search-cases/<case>/jobs.jsonl \
   --output job-search-cases/<case>/job-matches.csv
 ```

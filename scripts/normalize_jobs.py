@@ -11,7 +11,6 @@ import json
 import pathlib
 import re
 import sys
-from typing import Iterable
 
 
 FIELD_ALIASES = {
@@ -62,13 +61,20 @@ def parse_csv(path: pathlib.Path) -> list[dict[str, str]]:
         return [dict(row) for row in csv.DictReader(handle)]
 
 
+def _is_separator_row(cells: list[str]) -> bool:
+    return bool(cells) and all(re.fullmatch(r":?-+:?", c) for c in cells if c)
+
+
 def parse_markdown_table(text: str) -> list[dict[str, str]]:
     lines = [line.strip() for line in text.splitlines() if line.strip().startswith("|")]
     if len(lines) < 2:
         return []
     header = [cell.strip() for cell in lines[0].strip("|").split("|")]
+    # 第二行通常是 |---|---| 分隔行，跳过；若不是（用户漏写），则视为数据行不丢弃。
+    second = [cell.strip() for cell in lines[1].strip("|").split("|")]
+    data_lines = lines[2:] if _is_separator_row(second) else lines[1:]
     rows: list[dict[str, str]] = []
-    for line in lines[2:]:
+    for line in data_lines:
         cells = [cell.strip() for cell in line.strip("|").split("|")]
         if len(cells) < len(header):
             cells += [""] * (len(header) - len(cells))
