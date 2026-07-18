@@ -37,6 +37,21 @@ class ParseMarkdownTableTests(unittest.TestCase):
     def test_no_table_returns_empty(self):
         self.assertEqual(nj.parse_markdown_table("just some text"), [])
 
+    def test_table_without_separator_keeps_first_data_row(self):
+        # 用户漏写 |---| 分隔行时，首个数据行不能被当成分隔行丢弃（回归 E）。
+        text = (
+            "| platform | company | title | city |\n"
+            "| Boss直聘 | 示例科技 | 产品运营实习生 | 深圳 |\n"
+        )
+        rows = nj.parse_markdown_table(text)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["company"], "示例科技")
+
+    def test_is_separator_row(self):
+        self.assertTrue(nj._is_separator_row(["---", ":--", "--:", ":-:"]))
+        self.assertFalse(nj._is_separator_row(["Boss直聘", "示例科技"]))
+        self.assertFalse(nj._is_separator_row([]))
+
 
 class ParseTextBlocksTests(unittest.TestCase):
     def test_blocks_split_by_separator(self):
