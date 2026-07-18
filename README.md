@@ -162,7 +162,11 @@ job-search-cases/<yyyy-mm-dd-user-slug>/
 
 ## Optional Dependencies
 
-基础使用不需要安装依赖。只有解析 PDF/DOCX 简历时才需要：
+基础使用不需要安装依赖。可选依赖用于增强以下能力（缺失时自动降级，不影响基本流程）：
+
+- `pdfplumber` / `python-docx`：解析 PDF、DOCX 简历。
+- `PyYAML`：更稳健地解析 `profile.yaml`（缺失时用内置轻量解析器）。
+- `jieba`：中文分词更准，提升岗位关键词匹配质量（缺失时回退到 bigram）。
 
 ```bash
 python3 -m pip install -r requirements-optional.txt
