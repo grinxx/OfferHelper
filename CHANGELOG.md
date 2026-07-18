@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.1
+
+- 评分脚本修正长 JD 惩罚：匹配度分母改为 `min(JD词数, 8)`，详细的长 JD 不再被系统性压低分数。
+- 评分脚本修正 fit/hard 重复计分：岗位未单列 `hard_requirements` 时不再回退到 `jd_text`，改给中性基准分并提示人工核对。
+- 岗位匹配只使用真实经历（`experience-assets.md` + `strengths.md` + 教育背景），新增 `--experience` 参数；`target_roles`/`preferred_industries` 等意向字段不再被误当作经历。
+- 评分脚本增强：PyYAML 缺失时回退到内置轻量解析器；中文优先用 jieba 分词，缺失时回退 bigram。
+- `normalize_jobs.py` 修正：文件首个文本块能被正确解析、标题行不混入 `jd_text`；Markdown 表格漏写 `|---|` 分隔行时不再丢弃首个数据行；移除未使用导入。
+- 新增 `tests/` 回归测试（评分与解析），覆盖可选依赖缺失的降级路径。
+- README 新增“更新到最新版本”说明。
+
 ## 0.3.0
 
 - 目标群体聚焦为**应届生和在校生**，移除换工作/转行分支。
