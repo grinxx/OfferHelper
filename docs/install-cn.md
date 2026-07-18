@@ -5,16 +5,18 @@
 打开终端，粘贴并运行：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/grinxx/OfferHelper/main/scripts/install_local.py | python3
+npx skills add grinxx/OfferHelper
 ```
 
-默认安装到 Claude Code（`~/.claude/skills/offer-helper`）。安装完成后，重启 Agent 或新开会话，输入：
+命令会 clone 仓库、列出可安装的 Agent 供你选择，并在安装前展示安全扫描结果。安装完成后，重启 Agent 或新开会话，输入：
 
 ```text
 $offer-helper
 ```
 
 能触发 Skill 即安装成功。
+
+> 这也是让 OfferHelper 出现在 [skills.sh](https://skills.sh/grinxx/OfferHelper) 统计中的方式——每次通过该命令安装都会计入匿名安装量。
 
 ---
 
