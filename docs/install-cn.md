@@ -20,23 +20,11 @@ $offer-helper
 
 ---
 
-## 方式二：让 Agent 帮你安装
-
-在 Claude Code 或其他支持 Skill 的 Agent 里说：
-
-```text
-帮我安装这个 Skill：https://github.com/grinxx/OfferHelper
-```
-
-Agent 会自动完成安装，重启后生效。
-
----
-
-## 方式三：手动安装（备用）
+## 方式二：手动安装（备用）
 
 ### 下载 ZIP（不需要 git）
 
-1. 打开 https://github.com/grinxx/OfferHelper
+1. 在 GitHub 搜索 `grinxx/OfferHelper`，或通过 skills.sh 页面找到仓库链接
 2. 点击绿色 **Code** 按钮 → **Download ZIP**
 3. 解压后，将整个文件夹复制到对应目录：
 
@@ -45,22 +33,6 @@ Agent 会自动完成安装，重启后生效。
 | Claude Code | `~/.claude/skills/offer-helper` |
 | Codex | `~/.codex/skills/offer-helper` |
 | 项目级（所有 Agent）| `.agents/skills/offer-helper`（在项目根目录） |
-
-### 使用安装脚本指定 Agent
-
-```bash
-# 安装到 Claude Code（默认）
-python3 scripts/install_local.py
-
-# 安装到 Codex
-python3 scripts/install_local.py --agent codex
-
-# 安装到当前项目（项目级）
-python3 scripts/install_local.py --project
-
-# 覆盖已有安装
-python3 scripts/install_local.py --force
-```
 
 ### 使用 git clone
 
