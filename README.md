@@ -76,24 +76,7 @@ npx skills add grinxx/OfferHelper
 
 > 这也是让 OfferHelper 计入 [skills.sh](https://skills.sh/grinxx/OfferHelper) 安装量统计的方式；`git clone` 等方式不会计入。
 
-### 2. 让 Agent 帮你安装
-
-在 Claude Code 或其他支持 Skill 的 Agent 里直接说：
-
-```text
-帮我安装这个 Skill：https://github.com/grinxx/OfferHelper
-```
-
-Agent 会把仓库安装到对应的本地 Skill 目录。安装完成后，重启你的 Agent 或新开会话：
-
-```text
-$offer-helper
-我是 2026 届本科生，目标城市深圳，想投 AI 应用实习或产品运营实习。
-我会上传简历，并粘贴 3 个真实 JD。
-请先问我必要问题，再帮我建立求职案例目录。
-```
-
-### 3. 手动安装备用
+### 2. 手动安装备用
 
 如果你的 Agent 不能自动安装，可以按所用工具的 Skill 目录手动 clone：
 
