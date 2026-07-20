@@ -39,5 +39,5 @@
 - 提供 PDF/DOCX/TXT/Markdown 简历文本提取脚本。
 - 提供 JD 标准化和岗位匹配评分脚本。
 - 提供国内用户安装说明、使用指南、FAQ 和安全边界说明。
-- 简化 Quick Start：推荐使用 Agent 一句话安装，手动安装降级为备用方式。
+- 简化 Quick Start：推荐使用 `npx skills add` 安装，手动安装降级为备用方式。
 - 安装说明面向 Codex、Claude Code 和其他支持 Skill 的 Agent。

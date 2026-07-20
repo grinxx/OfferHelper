@@ -109,7 +109,7 @@ git pull
 
 **下载 ZIP 安装的**：重新下载最新 ZIP，覆盖原 Skill 目录即可。
 
-**让 Agent 帮你安装的**：再对 Agent 说一次"更新这个 Skill"，它会重新拉取最新代码。
+**`npx skills add` 安装的**：重新运行 `npx skills add grinxx/OfferHelper` 并选择覆盖安装。
 
 > 更新只影响 Skill 代码本身。你的求职案例数据在 `job-search-cases/`（通常在你的工作目录，不在 Skill 目录内），不受更新影响；若你选择删除目录重装，请勿把案例数据一起删掉。
 
